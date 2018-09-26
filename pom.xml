@@ -13,6 +13,7 @@
     <module>lmm-videos-mapper</module>
     <module>lmm-videos-service</module>
     <module>lmm-videos-mini-api</module>
+      <module>mybatis-generatorConfig</module>
   </modules>
   <packaging>pom</packaging>
 
