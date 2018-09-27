@@ -11,6 +11,7 @@
         <module name="lmmvideosminiapi" />
         <module name="lmmvideospojo" />
         <module name="lmmvideosservice" />
+        <module name="mybatisgeneratorConfig" />
       </profile>
     </annotationProcessing>
   </component>

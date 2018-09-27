@@ -52,7 +52,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.41</version>
+            <version>8.0.11</version>
         </dependency>
 
         <!--mybatis-->
@@ -123,14 +123,7 @@
 
         <resources>
             <resource>
-                <directory>mybatis-generatorConfig/src/main/java</directory>
-                <includes>
-                    <include>**/*.properties</include>
-                    <include>**/*.xml</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>mybatis-generatorConfig/src/main/resources</directory>
+                <directory>src/main/resources</directory>
             </resource>
         </resources>
     </build>

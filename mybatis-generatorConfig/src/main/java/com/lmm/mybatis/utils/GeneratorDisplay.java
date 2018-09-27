@@ -1,6 +1,7 @@
 package com.lmm.mybatis.utils;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,8 @@ public class GeneratorDisplay {
 		List<String> warnings = new ArrayList<String>();
 		boolean overwrite = true;
 		//指定 逆向工程配置文件
-		File configFile = new File("generatorConfig.xml");
+		URL url = GeneratorDisplay.class.getClassLoader().getResource("generatorConfig.xml");
+		File configFile = new File(url.getFile());
 		ConfigurationParser cp = new ConfigurationParser(warnings);
 		Configuration config = cp.parseConfiguration(configFile);
 		DefaultShellCallback callback = new DefaultShellCallback(overwrite);
