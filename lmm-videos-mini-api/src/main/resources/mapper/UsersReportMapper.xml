@@ -13,16 +13,5 @@
     <result column="userid" jdbcType="VARCHAR" property="userid" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
   </resultMap>
-  <resultMap id="BaseResultMap" type="com.lmm.pojo.UsersReport">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="deal_user_id" jdbcType="VARCHAR" property="dealUserId" />
-    <result column="deal_video_id" jdbcType="VARCHAR" property="dealVideoId" />
-    <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="userid" jdbcType="VARCHAR" property="userid" />
-    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
-  </resultMap>
+
 </mapper>

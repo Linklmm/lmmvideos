@@ -9,12 +9,5 @@
     <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="fan_id" jdbcType="VARCHAR" property="fanId" />
   </resultMap>
-  <resultMap id="BaseResultMap" type="com.lmm.pojo.UsersFans">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
-    <result column="fan_id" jdbcType="VARCHAR" property="fanId" />
-  </resultMap>
+
 </mapper>

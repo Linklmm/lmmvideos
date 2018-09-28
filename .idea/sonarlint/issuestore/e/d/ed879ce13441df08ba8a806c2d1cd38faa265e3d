@@ -1,0 +1,6 @@
+
+T
+squid:S106"9Replace this use of System.out or System.err by a logger.(ÎË¡Æùÿÿÿÿ
+zsquid:S1488"^Immediately return this expression instead of assigning it to the temporary variable "newstr".(×ŞÖÿÿÿÿÿ
+^squid:S00112"FDefine and throw a dedicated exception instead of using a generic one.(’¥à–
+?squid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ

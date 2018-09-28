@@ -13,7 +13,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
 @MapperScan(basePackages = "com.lmm.mapper")
-@ComponentScan(basePackages = {"com.lmm"})
+@ComponentScan(basePackages = {"com.lmm","org.n3r.idworker"})
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

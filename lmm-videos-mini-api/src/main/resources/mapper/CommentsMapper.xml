@@ -11,14 +11,4 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
   </resultMap>
-  <resultMap id="BaseResultMap" type="com.lmm.pojo.Comments">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="video_id" jdbcType="VARCHAR" property="videoId" />
-    <result column="from_user_id" jdbcType="VARCHAR" property="fromUserId" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
-  </resultMap>
 </mapper>
