@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+
+
 @RestController
 @Api(value = "用户注册登录的接口", tags = {"注册和登录的controller"})
 public class RegistLoginController {
@@ -48,5 +50,30 @@ public class RegistLoginController {
         //不能将密码存到前端中
         user.setPassword("");
         return IMoocJSONResult.ok(user);
+    }
+
+    @ApiOperation(value = "用户登录的接口",notes ="用户登录的接口" )
+    @PostMapping("/login")
+    public IMoocJSONResult login(@RequestBody Users user) throws Exception {
+        String password=MD5Utils.getMD5Str(user.getPassword());
+        //1.判断用户名和密码不为空
+        if (StringUtils.isBlank(user.getUsername())||StringUtils.isBlank(user.getPassword())){
+            return IMoocJSONResult.errorMsg("用户名和密码不能为空");
+        }
+        //2.判断用户名是否存在
+        boolean usernameIsExist=userService.queryUsernameIsExist(user.getUsername());
+
+        if(!usernameIsExist){
+            return IMoocJSONResult.errorMsg("用户不存在！");
+        }else {
+            //3.判断用户名和密码是否正确
+            Users result = userService.loginUser(user.getUsername(),password);
+            if (result!=null) {
+                result.setPassword("");
+                return IMoocJSONResult.ok(result);
+            } else {
+                return IMoocJSONResult.errorMsg("用户名或密码错误！请重试.....");
+            }
+        }
     }
 }

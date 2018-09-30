@@ -10,7 +10,13 @@ public interface UserService {
     public boolean queryUsernameIsExist(String username);
 
     /**
-     * @desciptiion: 保存用户（用户注册）
+     * @descriptiion: 保存用户（用户注册）
      * */
     public void saveUser(Users users);
+
+    /**
+     * @description: 用户登录
+     *
+     * */
+    public Users loginUser(String username,String password);
 }
