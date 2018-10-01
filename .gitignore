@@ -4,4 +4,6 @@
 target/
 *.iml
 pom.xml
-resources
+resources/log4j.properties
+resources/application.properties
+resources/generatorConfig.xml

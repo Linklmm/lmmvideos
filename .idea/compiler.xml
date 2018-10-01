@@ -6,12 +6,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="lmm-videos-common" />
+        <module name="lmm-videos-mapper" />
+        <module name="lmm-videos-mini-api" />
+        <module name="lmm-videos-pojo" />
+        <module name="lmm-videos-service" />
         <module name="lmmvideoscommon" />
         <module name="lmmvideosmapper" />
         <module name="lmmvideosminiapi" />
         <module name="lmmvideospojo" />
         <module name="lmmvideosservice" />
-        <module name="mybatisgeneratorConfig" />
+        <module name="mybatis-generatorConfig" />
       </profile>
     </annotationProcessing>
   </component>
