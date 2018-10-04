@@ -10,6 +10,11 @@ public class BasicController {
 	
 	@Autowired
 	public RedisOperator redis;
+	// 文件保存的命名空间
+	public static final String FILE_SPACE = "F:/lmm_videos";
+
+	//ffmpeg所在目录
+	public static final String FFMPEG_EXE="D:\\ffmpeg-20181003-ebc3d04-win64-static\\bin\\\\ffmpeg.exe";
 
 	public static final String USER_REDIS_SESSION="user-redis-session";
 }

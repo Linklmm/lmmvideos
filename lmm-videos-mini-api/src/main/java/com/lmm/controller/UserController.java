@@ -94,6 +94,23 @@ public class UserController extends BasicController{
         user.setFaceImage(uploadPathDB);
         userService.updateUserInfo(user);
 
-        return IMoocJSONResult.ok();
+        return IMoocJSONResult.ok(uploadPathDB);
+    }
+
+    @ApiOperation(value = "查询用户信息",notes ="查询用户信息的接口" )
+    @ApiImplicitParam(name = "userId",value = "用户id",required = true,
+            dataType = "String",paramType = "query")
+    @PostMapping("/query")
+    public IMoocJSONResult query(String userId)throws Exception{
+        if (StringUtils.isBlank(userId)){
+            return IMoocJSONResult.errorMsg("用户id不能为空...");
+        }
+
+
+        Users userInfo=userService.queryUserInfo(userId);
+        UsersVo usersVo=new UsersVo();
+        BeanUtils.copyProperties(userInfo,usersVo);
+
+        return IMoocJSONResult.ok(usersVo);
     }
 }

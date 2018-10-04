@@ -1,5 +1,6 @@
 package com.lmm.pojo.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -19,6 +20,7 @@ public class UsersVo {
     private String username;
 
     @ApiModelProperty(value = "密码",name = "password",example = "123456",required =true )
+    @JsonIgnore
     private String password;
 
     //我的头像
