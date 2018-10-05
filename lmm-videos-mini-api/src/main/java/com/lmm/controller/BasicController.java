@@ -17,4 +17,7 @@ public class BasicController {
 	public static final String FFMPEG_EXE="D:\\ffmpeg-20181003-ebc3d04-win64-static\\bin\\\\ffmpeg.exe";
 
 	public static final String USER_REDIS_SESSION="user-redis-session";
+
+	//每页分页的记录数
+	public static final Integer PAGE_SIZE=5;
 }
