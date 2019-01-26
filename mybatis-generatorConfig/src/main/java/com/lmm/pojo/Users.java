@@ -14,7 +14,7 @@ public class Users {
     @Column(name = "face_image")
     private String faceImage;
 
-    private String rickname;
+    private String nickname;
 
     @Column(name = "fans_counts")
     private Integer fansCounts;
@@ -82,17 +82,17 @@ public class Users {
     }
 
     /**
-     * @return rickname
+     * @return nickname
      */
-    public String getRickname() {
-        return rickname;
+    public String getnickname() {
+        return nickname;
     }
 
     /**
-     * @param rickname
+     * @param nickname
      */
-    public void setRickname(String rickname) {
-        this.rickname = rickname;
+    public void setnickname(String nickname) {
+        this.nickname = nickname;
     }
 
     /**

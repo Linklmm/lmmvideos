@@ -42,7 +42,7 @@ public class RegistLoginController extends BasicController{
         boolean usernameIsExist=userService.queryUsernameIsExist(user.getUsername());
         //3.保存用户，注册信息
         if(!usernameIsExist){
-            user.setRickname(user.getUsername());
+            user.setnickname(user.getUsername());
             user.setPassword(MD5Utils.getMD5Str(user.getPassword()));
             user.setFansCounts(0);
             user.setReceiveLikeCounts(0);

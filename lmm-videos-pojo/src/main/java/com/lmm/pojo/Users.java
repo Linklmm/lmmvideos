@@ -24,7 +24,7 @@ public class Users {
     private String faceImage;
 
     //我的昵称
-    private String rickname;
+    private String nickname;
 
     @ApiModelProperty(hidden = true)
     @Column(name = "fans_counts")
@@ -95,17 +95,17 @@ public class Users {
     }
 
     /**
-     * @return rickname
+     * @return nickname
      */
-    public String getRickname() {
-        return rickname;
+    public String getnickname() {
+        return nickname;
     }
 
     /**
-     * @param rickname
+     * @param nickname
      */
-    public void setRickname(String rickname) {
-        this.rickname = rickname;
+    public void setnickname(String nickname) {
+        this.nickname = nickname;
     }
 
     /**

@@ -9,7 +9,7 @@
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="face_image" jdbcType="VARCHAR" property="faceImage" />
-    <result column="rickname" jdbcType="VARCHAR" property="rickname" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
     <result column="fans_counts" jdbcType="INTEGER" property="fansCounts" />
     <result column="follow_counts" jdbcType="INTEGER" property="followCounts" />
     <result column="receive_like_counts" jdbcType="INTEGER" property="receiveLikeCounts" />
@@ -30,7 +30,7 @@
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="face_image" jdbcType="VARCHAR" property="faceImage" />
-    <result column="rickname" jdbcType="VARCHAR" property="rickname" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
     <result column="fans_counts" jdbcType="INTEGER" property="fansCounts" />
     <result column="follow_counts" jdbcType="INTEGER" property="followCounts" />
     <result column="receive_like_counts" jdbcType="INTEGER" property="receiveLikeCounts" />
