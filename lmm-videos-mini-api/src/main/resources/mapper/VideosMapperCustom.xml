@@ -33,6 +33,10 @@
     order by v.create_time desc
   </select>
 
+  <select id="queryMyFollowVideos" parameterType="String" resultMap="BaseResultMap">
+
+  </select>
+
 
   <update id="addVideoLikeCount" parameterType="String">
     update

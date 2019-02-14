@@ -7,6 +7,7 @@
 package com.lmm.controller;
 
 import com.lmm.pojo.Users;
+import com.lmm.pojo.vo.PublisherVideo;
 import com.lmm.pojo.vo.UsersVo;
 import com.lmm.service.UserService;
 import com.lmm.utils.IMoocJSONResult;
@@ -101,16 +102,62 @@ public class UserController extends BasicController{
     @ApiImplicitParam(name = "userId",value = "用户id",required = true,
             dataType = "String",paramType = "query")
     @PostMapping("/query")
-    public IMoocJSONResult query(String userId)throws Exception{
+    public IMoocJSONResult query(String userId,String fanId)throws Exception{
         if (StringUtils.isBlank(userId)){
             return IMoocJSONResult.errorMsg("用户id不能为空...");
         }
-
 
         Users userInfo=userService.queryUserInfo(userId);
         UsersVo usersVo=new UsersVo();
         BeanUtils.copyProperties(userInfo,usersVo);
 
+        usersVo.setFollow(userService.queryIsFollow(userId,fanId));
         return IMoocJSONResult.ok(usersVo);
+    }
+
+    /**
+     * @description: 查询视频发布者的信息
+     * @param loginUserId
+     * @param videoId
+     * @param publisherUserId
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/queryPublisher")
+    public IMoocJSONResult queryPublisher(String loginUserId,String videoId,String publisherUserId)throws Exception{
+        if (StringUtils.isBlank(publisherUserId)){
+            return IMoocJSONResult.errorMsg("视频提供者id不能为空！");
+        }
+
+        //1.查询视频发布者的信息
+        Users userInfo=userService.queryUserInfo(publisherUserId);
+        UsersVo publisher=new UsersVo();
+        BeanUtils.copyProperties(userInfo,publisher);
+        //2.查询当前登录者和视频的关系
+        boolean userLikeVideo = userService.isUserLikeVideo(loginUserId,videoId);
+
+        PublisherVideo publisherVideo = new PublisherVideo();
+        publisherVideo.setPublisher(publisher);
+        publisherVideo.setUserLikeVideo(userLikeVideo);
+
+        return IMoocJSONResult.ok(publisherVideo);
+    }
+
+    @PostMapping("/beYourFans")
+    public IMoocJSONResult beYourFans(String userId,String fanId)throws Exception{
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(fanId)){
+            return IMoocJSONResult.errorMsg("用户id不能为空...");
+        }
+        userService.saveUserFanRelation(userId,fanId);
+        return IMoocJSONResult.ok("关注成功！");
+    }
+
+    @PostMapping("/notBeYourFans")
+    public IMoocJSONResult notBeYourFans(String userId,String fanId)throws Exception{
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(fanId)){
+            return IMoocJSONResult.errorMsg("用户id不能为空...");
+        }
+        userService.delUserFanRelation(userId,fanId);
+        return IMoocJSONResult.ok("取消关注成功！");
     }
 }

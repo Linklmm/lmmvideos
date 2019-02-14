@@ -10,7 +10,19 @@ import java.util.List;
 //@Repository
 public interface VideosMapperCustom extends MyMapper<Videos> {
 
+    /**
+     * @description： 条件查询所有视频列表
+     * @param videoDesc
+     * @return
+     */
     public List<VideosVo> queryAllVideos(@Param("videoDesc") String videoDesc);
+
+    /**
+     * @description： 查询关注的所有视频
+     * @param userId
+     * @return
+     */
+    public List<VideosVo> queryMyFollowVideos(String userId);
 
     /**
      * @description: 对喜欢的视频的数量进行累加
