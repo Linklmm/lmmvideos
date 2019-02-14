@@ -30,4 +30,20 @@ public interface VideoService {
      * @return
      */
     public List<String> getHotWords();
+
+    /**
+     * 用户喜欢的视频/点赞
+     * @param userId
+     * @param videoId
+     * @param videoCreaterId
+     */
+    public void userLikeVideo(String userId,String videoId,String videoCreaterId);
+
+    /**
+     * 取消点赞
+     * @param userId
+     * @param videoId
+     * @param videoCreaterId
+     */
+    public void userUnLikeVideo(String userId,String videoId,String videoCreaterId);
 }

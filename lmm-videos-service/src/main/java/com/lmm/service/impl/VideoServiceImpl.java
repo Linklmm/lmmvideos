@@ -2,10 +2,9 @@ package com.lmm.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lmm.mapper.SearchRecordsMapper;
-import com.lmm.mapper.VideosMapper;
-import com.lmm.mapper.VideosMapperCustom;
+import com.lmm.mapper.*;
 import com.lmm.pojo.SearchRecords;
+import com.lmm.pojo.UsersLikeVideos;
 import com.lmm.pojo.Videos;
 import com.lmm.pojo.vo.VideosVo;
 import com.lmm.service.VideoService;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -32,6 +32,12 @@ public class VideoServiceImpl implements VideoService {
 
     @Autowired
     private SearchRecordsMapper searchRecordsMapper;
+
+    @Autowired
+    private UsersLikeVideosMapper usersLikeVideosMapper;
+    @Autowired
+    private UsersMapper usersMapper;
+
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
@@ -86,5 +92,45 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public List<String> getHotWords() {
         return searchRecordsMapper.getHotwords();
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void userLikeVideo(String userId, String videoId, String videoCreaterId) {
+        String likeId = sid.nextShort();
+
+        //1.保存用户和视频的喜欢点赞关联关系表
+        UsersLikeVideos ulv = new UsersLikeVideos();
+        ulv.setId(likeId);
+        ulv.setUserId(userId);
+        ulv.setVideoId(videoId);
+
+        usersLikeVideosMapper.insert(ulv);
+
+        //2.视频增加喜欢数
+
+        videosMapperCustom.addVideoLikeCount(videoId);
+        //3.用户作品受喜欢数增加
+        usersMapper.addReceiveLikeCount(userId);
+
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void userUnLikeVideo(String userId, String videoId, String videoCreaterId) {
+        String likeId = sid.nextShort();
+
+        //1.删除用户和视频的喜欢点赞关联关系表
+        Example example = new Example(UsersLikeVideos.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userId",userId);
+        criteria.andEqualTo("videoId",videoId);
+        usersLikeVideosMapper.deleteByExample(example);
+
+        //2.视频减少喜欢数
+
+        videosMapperCustom.reduceVideoLikeCount(videoId);
+        //3.用户作品受喜欢数减少
+        usersMapper.reduceReceiveLikeCount(userId);
     }
 }
