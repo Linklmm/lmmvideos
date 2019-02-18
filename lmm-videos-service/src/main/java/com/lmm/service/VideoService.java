@@ -1,6 +1,7 @@
 package com.lmm.service;
 
 import com.lmm.pojo.Videos;
+import com.lmm.pojo.vo.VideosVo;
 import com.lmm.utils.PagedResult;
 
 import java.util.List;
@@ -46,4 +47,18 @@ public interface VideoService {
      * @param videoCreaterId
      */
     public void userUnLikeVideo(String userId,String videoId,String videoCreaterId);
+
+    /**
+     * 查询关注者的所有视频
+     * @param userId
+     * @return
+     */
+    public PagedResult queryMyFollowVideos(String userId,Integer page,Integer pageSize);
+
+    /**
+     * 查询用户喜欢的视频
+     * @param userId
+     * @return
+     */
+    public PagedResult queryMyLikeVideos(String userId,Integer page,Integer pageSize);
 }

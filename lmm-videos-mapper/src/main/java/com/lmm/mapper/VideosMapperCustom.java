@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-//@Repository
+@Repository
 public interface VideosMapperCustom extends MyMapper<Videos> {
 
     /**
@@ -15,14 +15,21 @@ public interface VideosMapperCustom extends MyMapper<Videos> {
      * @param videoDesc
      * @return
      */
-    public List<VideosVo> queryAllVideos(@Param("videoDesc") String videoDesc);
+    public List<VideosVo> queryAllVideos(@Param("videoDesc") String videoDesc,@Param("userId") String userId);
 
     /**
-     * @description： 查询关注的所有视频
+     * @description： 查询关注者的所有视频
      * @param userId
      * @return
      */
     public List<VideosVo> queryMyFollowVideos(String userId);
+
+    /**
+     * 查询点赞视频
+     * @param userId
+     * @return
+     */
+    public List<VideosVo> queryMyLikeVideos(@Param("userId") String userId);
 
     /**
      * @description: 对喜欢的视频的数量进行累加
