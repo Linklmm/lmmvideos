@@ -9,9 +9,11 @@ package com.lmm.service.impl;
 import com.lmm.mapper.UsersFansMapper;
 import com.lmm.mapper.UsersLikeVideosMapper;
 import com.lmm.mapper.UsersMapper;
+import com.lmm.mapper.UsersReportMapper;
 import com.lmm.pojo.Users;
 import com.lmm.pojo.UsersFans;
 import com.lmm.pojo.UsersLikeVideos;
+import com.lmm.pojo.UsersReport;
 import com.lmm.service.UserService;
 import com.lmm.utils.IMoocJSONResult;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,7 +36,8 @@ public class UserServiceImpl implements UserService {
     private UsersLikeVideosMapper usersLikeVideosMapper;
     @Autowired
     private UsersFansMapper usersFansMapper;
-
+    @Autowired
+    private UsersReportMapper usersReportMapper;
     @Autowired
     private Sid sid;
 
@@ -147,5 +151,15 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         return false;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void reportUser(UsersReport usersReport) {
+        String urId = sid.nextShort();
+        usersReport.setId(urId);
+        usersReport.setCreateDate(new Date());
+
+        usersReportMapper.insert(usersReport);
     }
 }

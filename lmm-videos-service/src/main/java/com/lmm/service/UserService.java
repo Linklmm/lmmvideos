@@ -1,6 +1,7 @@
 package com.lmm.service;
 
 import com.lmm.pojo.Users;
+import com.lmm.pojo.UsersReport;
 
 public interface UserService {
     /**
@@ -63,4 +64,10 @@ public interface UserService {
      * @return
      */
     public boolean queryIsFollow(String userId, String fanId);
+
+    /**
+     * @description: 举报用户
+     * @param usersReport
+     */
+    public void reportUser(UsersReport usersReport);
 }

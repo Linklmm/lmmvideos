@@ -7,6 +7,7 @@
 package com.lmm.controller;
 
 import com.lmm.pojo.Users;
+import com.lmm.pojo.UsersReport;
 import com.lmm.pojo.vo.PublisherVideo;
 import com.lmm.pojo.vo.UsersVo;
 import com.lmm.service.UserService;
@@ -159,5 +160,14 @@ public class UserController extends BasicController{
         }
         userService.delUserFanRelation(userId,fanId);
         return IMoocJSONResult.ok("取消关注成功！");
+    }
+    //举报用户
+    @PostMapping("/reportUser")
+    public IMoocJSONResult reportUser(@RequestBody UsersReport usersReport) throws Exception {
+
+        // 保存举报信息
+        userService.reportUser(usersReport);
+
+        return IMoocJSONResult.errorMsg("举报成功...有你平台变得更美好...");
     }
 }
