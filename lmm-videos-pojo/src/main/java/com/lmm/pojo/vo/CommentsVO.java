@@ -1,37 +1,56 @@
-package com.lmm.pojo;
+package com.lmm.pojo.vo;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
 import java.util.Date;
 
-public class Comments {
+public class CommentsVO {
     private String id;
-
-    @Column(name = "father_comment_id")
-    private String fatherCommentId;
-
-    @Column(name = "to_user_id")
-    private String toUserId;
 
     /**
      * 视频id
      */
-    @Column(name = "video_id")
     private String videoId;
 
     /**
      * 留言者，评论的用户id
      */
-    @Column(name = "from_user_id")
     private String fromUserId;
 
-    @Column(name = "create_time")
     private Date createTime;
 
     /**
      * 评论内容
      */
     private String comment;
+
+    private String faceImage;
+    private String nickname;
+    private String toNickname;
+    private String timeAgoStr;
+
+
+    public String getTimeAgoStr() {
+        return timeAgoStr;
+    }
+
+    public void setTimeAgoStr(String timeAgoStr) {
+        this.timeAgoStr = timeAgoStr;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getFaceImage() {
+        return faceImage;
+    }
+
+    public void setFaceImage(String faceImage) {
+        this.faceImage = faceImage;
+    }
 
     /**
      * @return id
@@ -45,34 +64,6 @@ public class Comments {
      */
     public void setId(String id) {
         this.id = id;
-    }
-
-    /**
-     * @return father_comment_id
-     */
-    public String getFatherCommentId() {
-        return fatherCommentId;
-    }
-
-    /**
-     * @param fatherCommentId
-     */
-    public void setFatherCommentId(String fatherCommentId) {
-        this.fatherCommentId = fatherCommentId;
-    }
-
-    /**
-     * @return to_user_id
-     */
-    public String getToUserId() {
-        return toUserId;
-    }
-
-    /**
-     * @param toUserId
-     */
-    public void setToUserId(String toUserId) {
-        this.toUserId = toUserId;
     }
 
     /**
@@ -141,5 +132,13 @@ public class Comments {
      */
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getToNickname() {
+        return toNickname;
+    }
+
+    public void setToNickname(String toNickname) {
+        this.toNickname = toNickname;
     }
 }

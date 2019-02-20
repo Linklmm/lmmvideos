@@ -1,5 +1,6 @@
 package com.lmm.service;
 
+import com.lmm.pojo.Comments;
 import com.lmm.pojo.Videos;
 import com.lmm.pojo.vo.VideosVo;
 import com.lmm.utils.PagedResult;
@@ -61,4 +62,19 @@ public interface VideoService {
      * @return
      */
     public PagedResult queryMyLikeVideos(String userId,Integer page,Integer pageSize);
+
+    /**
+     * 保存用户评论
+     * @param comments
+     */
+    public void saveComment(Comments comments);
+
+    /**
+     * 查询所有评论
+     * @param videoId
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    public PagedResult getAllComments(String videoId,Integer page,Integer pageSize);
 }

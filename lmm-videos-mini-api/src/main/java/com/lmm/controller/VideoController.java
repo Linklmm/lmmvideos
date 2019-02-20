@@ -2,6 +2,7 @@ package com.lmm.controller;
 
 import com.lmm.enums.VideoStatusEnum;
 import com.lmm.pojo.Bgm;
+import com.lmm.pojo.Comments;
 import com.lmm.pojo.Videos;
 import com.lmm.service.BgmService;
 import com.lmm.service.VideoService;
@@ -316,5 +317,43 @@ public class VideoController extends BasicController {
         PagedResult videoList = videoService.queryMyLikeVideos(userId, page, pageSize);
 
         return IMoocJSONResult.ok(videoList);
+    }
+
+
+    /**
+     * 保存用户评论
+     * @param comments
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/saveComment")
+    public IMoocJSONResult saveComment(@RequestBody Comments comments)throws Exception{
+        videoService.saveComment(comments);
+        return IMoocJSONResult.ok();
+    }
+
+    /**
+     * 分页查询评论列表
+     * @param videoId
+     * @param page
+     * @param pageSize
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/getVideoComments")
+    public IMoocJSONResult getVideoComments(String videoId,Integer page,Integer pageSize)throws Exception{
+        if (StringUtils.isBlank(videoId)){
+            return IMoocJSONResult.ok();
+        }
+
+        if (page ==null){
+            page =1;
+        }
+        if (pageSize ==null){
+            pageSize = 10;
+        }
+
+        PagedResult list = videoService.getAllComments(videoId,page,pageSize);
+        return IMoocJSONResult.ok(list);
     }
 }
