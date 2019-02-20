@@ -24,6 +24,7 @@ public class CommentsVO {
 
     private String faceImage;
     private String nickname;
+//    回复的人
     private String toNickname;
     private String timeAgoStr;
 

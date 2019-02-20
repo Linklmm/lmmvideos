@@ -327,7 +327,10 @@ public class VideoController extends BasicController {
      * @throws Exception
      */
     @PostMapping("/saveComment")
-    public IMoocJSONResult saveComment(@RequestBody Comments comments)throws Exception{
+    public IMoocJSONResult saveComment(@RequestBody Comments comments,String fatherCommentId,
+                                       String toUserId )throws Exception{
+        comments.setFatherCommentId(fatherCommentId);
+        comments.setToUserId(toUserId);
         videoService.saveComment(comments);
         return IMoocJSONResult.ok();
     }
