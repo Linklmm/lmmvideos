@@ -1,5 +1,6 @@
 package com.lmm;
 
+import com.lmm.controller.ZKCuratorClient;
 import com.lmm.controller.interceptor.MiniInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +35,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .addResourceLocations("file:F:/lmm_videos/");
     }
 
+    @Bean(initMethod = "init")
+    public ZKCuratorClient zkCuratorClient() {
+        return new ZKCuratorClient();
+    }
     /**
      * 对拦截器MiniInterceptor以bean的方式注册
      *
