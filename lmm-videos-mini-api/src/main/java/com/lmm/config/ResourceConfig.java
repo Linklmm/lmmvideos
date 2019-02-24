@@ -8,7 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 @ConfigurationProperties(prefix="com.lmm")
 @PropertySource("classpath:resource.properties")
 public class ResourceConfig {
-	//测试密钥
+
 	private String zookeeperServer;
 	private String bgmServer;
 	private String fileSpace;
