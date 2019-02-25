@@ -76,7 +76,7 @@ public class ZKCuratorClient {
                     String path = event.getData().getPath();
 
                     String operatorObjStr = new String(event.getData().getData());
-                    log.info("bgm的路径：{}",event.getData().getData().toString());
+                    log.info("bgm的路径：{}",event.getData().getData().toString(),"UTF-8");
                     Map<String, String> map = JsonUtils.jsonToPojo(operatorObjStr, Map.class);
                     String operatorType = map.get("operType");
                     String songPath = map.get("path");
