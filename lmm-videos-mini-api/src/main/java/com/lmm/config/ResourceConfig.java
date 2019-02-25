@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @ConfigurationProperties(prefix="com.lmm")
-@PropertySource("classpath:resource.properties")
+@PropertySource("classpath:resource_prod.properties")
 public class ResourceConfig {
 
 	private String zookeeperServer;
