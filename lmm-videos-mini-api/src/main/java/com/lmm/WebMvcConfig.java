@@ -28,11 +28,14 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         super.addInterceptors(registry);
     }
 
+    /**
+     * 静态资源路径映射
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**")
                 .addResourceLocations("classpath:/META-INF/resources/")
-                .addResourceLocations("file:F:/lmm_videos/");
+                .addResourceLocations("file:C:/lmm_videos/");
     }
 
     @Bean(initMethod = "init")
