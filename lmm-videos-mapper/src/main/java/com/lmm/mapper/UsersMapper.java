@@ -4,7 +4,7 @@ import com.lmm.pojo.Users;
 import com.lmm.utils.MyMapper;
 import org.springframework.stereotype.Repository;
 
-//@Repository
+@Repository
 public interface UsersMapper extends MyMapper<Users> {
 
     /**

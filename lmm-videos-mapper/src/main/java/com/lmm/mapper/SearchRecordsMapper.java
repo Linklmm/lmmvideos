@@ -5,6 +5,7 @@ import com.lmm.utils.MyMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+@Repository
 public interface SearchRecordsMapper extends MyMapper<SearchRecords> {
     public List<String> getHotwords();
 }

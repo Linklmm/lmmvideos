@@ -51,17 +51,19 @@ public class VideoServiceImpl implements VideoService {
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public String saveVideo(Videos video) {
+        logger.info("service保存视频的入参：video:{}", video);
         String id = sid.nextShort();
         video.setId(id);
         videosMapper.insertSelective(video);
-
+        logger.info("service保存视频的出参：id:{}", id);
         return id;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void updateVideo(String videoId, String coverPath) {
-
+        logger.info("service修改视频的封面入参：videoId:{},coverPath:{}",
+                videoId, coverPath);
         Videos video = new Videos();
         video.setId(videoId);
         video.setCoverPath(coverPath);
@@ -72,14 +74,14 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public PagedResult getAllVideos(Videos video, Integer isSaveRecord,
                                     Integer page, Integer pageSize) {
-        logger.info("进入service，video:{},isSaveRecord:{},page:{},pageSize:{}",
-                video,isSaveRecord,page,pageSize);
-        String desc =null;
-        String userId =null;
-        if (video!=null){
-        //保存热搜词
-        desc = video.getVideoDesc();
-        userId = video.getUserId();
+        logger.info("进入service分页查询视频列表，video:{},isSaveRecord:{},page:{},pageSize:{}",
+                video, isSaveRecord, page, pageSize);
+        String desc = null;
+        String userId = null;
+        if (video != null) {
+            //保存热搜词
+            desc = video.getVideoDesc();
+            userId = video.getUserId();
         }
         if (isSaveRecord != null && isSaveRecord == 1) {
             SearchRecords record = new SearchRecords();
@@ -90,7 +92,7 @@ public class VideoServiceImpl implements VideoService {
         }
 
         PageHelper.startPage(page, pageSize);
-        List<VideosVo> list = videosMapperCustom.queryAllVideos(desc,userId);
+        List<VideosVo> list = videosMapperCustom.queryAllVideos(desc, userId);
 
         PageInfo<VideosVo> pageList = new PageInfo<>(list);
 
@@ -99,7 +101,7 @@ public class VideoServiceImpl implements VideoService {
         pagedResult.setTotal(pageList.getPages());
         pagedResult.setRows(list);
         pagedResult.setRecords(pageList.getTotal());
-
+        logger.info("进入service分页查询视频列表出参，pagedResult:{}", pagedResult);
         return pagedResult;
     }
 
@@ -113,7 +115,8 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public void userLikeVideo(String userId, String videoId, String videoCreaterId) {
         String likeId = sid.nextShort();
-
+        logger.info("进入service用户喜欢的视频/点赞人参，userId:{},videoId:{},videoCreaterId:{}",
+                userId, videoId, videoCreaterId);
         //1.保存用户和视频的喜欢点赞关联关系表
         UsersLikeVideos ulv = new UsersLikeVideos();
         ulv.setId(likeId);
@@ -134,12 +137,13 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public void userUnLikeVideo(String userId, String videoId, String videoCreaterId) {
         String likeId = sid.nextShort();
-
+        logger.info("进入service用户取消喜欢的视频/点赞入参，userId:{},videoId:{},videoCreaterId:{}",
+                userId, videoId, videoCreaterId);
         //1.删除用户和视频的喜欢点赞关联关系表
         Example example = new Example(UsersLikeVideos.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("userId",userId);
-        criteria.andEqualTo("videoId",videoId);
+        criteria.andEqualTo("userId", userId);
+        criteria.andEqualTo("videoId", videoId);
         usersLikeVideosMapper.deleteByExample(example);
 
         //2.视频减少喜欢数
@@ -151,9 +155,13 @@ public class VideoServiceImpl implements VideoService {
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public PagedResult queryMyFollowVideos(String userId,Integer page,Integer pageSize) {
-        PageHelper.startPage(page,pageSize);
+    public PagedResult queryMyFollowVideos(String userId, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        logger.info("进入service查询关注者的所有视频入参，userId:{},page:{},pageSize:{}",
+                userId, page, pageSize);
+
         List<VideosVo> list = videosMapperCustom.queryMyFollowVideos(userId);
+        logger.info("进入service查询关注者的所有视频，list:{}", list);
 
         PageInfo<VideosVo> pageList = new PageInfo<>(list);
 
@@ -163,15 +171,17 @@ public class VideoServiceImpl implements VideoService {
         pagedResult.setPage(page);
         pagedResult.setRecords(pageList.getTotal());
 
+        logger.info("进入service查询关注者的所有视频出参，pagedResult:{}", pagedResult);
         return pagedResult;
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public PagedResult queryMyLikeVideos(String userId,Integer page,Integer pageSize) {
-        PageHelper.startPage(page,pageSize);
+    public PagedResult queryMyLikeVideos(String userId, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        logger.info("进入service查询用户喜欢的视频入参，userId:{},page:{},pageSize:{}",
+                userId, page, pageSize);
         List<VideosVo> list = videosMapperCustom.queryMyLikeVideos(userId);
-
         PageInfo<VideosVo> pageList = new PageInfo<>(list);
 
         PagedResult pagedResult = new PagedResult();
@@ -179,13 +189,14 @@ public class VideoServiceImpl implements VideoService {
         pagedResult.setRows(list);
         pagedResult.setPage(page);
         pagedResult.setRecords(pageList.getTotal());
-
+        logger.info("进入service查询用户喜欢的视频出参，pagedResult:{}", pagedResult);
         return pagedResult;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void saveComment(Comments comments) {
+        logger.info("进入service保存用户评论入参，comments:{}", comments);
         String id = sid.nextShort();
         comments.setId(id);
         comments.setCreateTime(new Date());
@@ -195,11 +206,13 @@ public class VideoServiceImpl implements VideoService {
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public PagedResult getAllComments(String videoId, Integer page, Integer pageSize) {
-        PageHelper.startPage(page,pageSize);
+        PageHelper.startPage(page, pageSize);
+        logger.info("进入service查询所有评论，videoId:{}，page:{},pageSize:{}",
+                videoId, page, pageSize);
 
         List<CommentsVO> list = commentsMapperCustom.queryComments(videoId);
-
-        for (CommentsVO c:list){
+        logger.info("进入service查询所有评论，list:{}", list);
+        for (CommentsVO c : list) {
             String timeAgo = TimeAgoUtils.format(c.getCreateTime());
             c.setTimeAgoStr(timeAgo);
         }
@@ -211,7 +224,7 @@ public class VideoServiceImpl implements VideoService {
         grid.setRows(list);
         grid.setPage(page);
         grid.setRecords(pageList.getTotal());
-
+        logger.info("进入service查询所有评论出参，grid:{}", grid);
         return grid;
     }
 }

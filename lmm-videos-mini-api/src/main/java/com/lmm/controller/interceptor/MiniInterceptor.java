@@ -4,6 +4,8 @@ import com.lmm.utils.IMoocJSONResult;
 import com.lmm.utils.JsonUtils;
 import com.lmm.utils.RedisOperator;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,6 +20,7 @@ public class MiniInterceptor implements HandlerInterceptor {
     @Autowired
     public RedisOperator redis;
     public static final String USER_REDIS_SESSION="user-redis-session";
+    private Logger logger = LoggerFactory.getLogger(MiniInterceptor.class);
     /**
      * 拦截请求，在controller调用之前
      * @param request
@@ -32,6 +35,7 @@ public class MiniInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         String userId = request.getHeader("userId");
         String userToken = request.getHeader("userToken");
+        logger.info("拦截请求入参：userId:{},userToken:{}",userId,userToken);
         if (StringUtils.isNotBlank(userId)&&StringUtils.isNotBlank(userToken)){
             String uniqueToken = redis.get(USER_REDIS_SESSION+":"+userId);
             //session过期重新登录
