@@ -13,6 +13,8 @@ import com.lmm.service.VideoService;
 import com.lmm.utils.PagedResult;
 import com.lmm.utils.TimeAgoUtils;
 import org.n3r.idworker.Sid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,6 +26,7 @@ import java.util.List;
 
 @Service
 public class VideoServiceImpl implements VideoService {
+    private static Logger logger = LoggerFactory.getLogger(VideoService.class);
 
     @Autowired
     private VideosMapper videosMapper;
@@ -69,10 +72,15 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public PagedResult getAllVideos(Videos video, Integer isSaveRecord,
                                     Integer page, Integer pageSize) {
+        logger.info("进入service，video:{},isSaveRecord:{},page:{},pageSize:{}",
+                video,isSaveRecord,page,pageSize);
+        String desc =null;
+        String userId =null;
+        if (video!=null){
         //保存热搜词
-        String desc = video.getVideoDesc();
-        String userId = video.getUserId();
-
+        desc = video.getVideoDesc();
+        userId = video.getUserId();
+        }
         if (isSaveRecord != null && isSaveRecord == 1) {
             SearchRecords record = new SearchRecords();
             String recordId = sid.nextShort();

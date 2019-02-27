@@ -13,7 +13,8 @@ import com.lmm.utils.PagedResult;
 import io.swagger.annotations.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,7 +39,8 @@ public class VideoController extends BasicController {
     @Autowired
     private VideoService videoService;
 
-    private Logger logger = Logger.getLogger(VideoController.class);
+    //日志输出
+    private Logger logger = LoggerFactory.getLogger(VideoController.class);
 
     /**
      * 用户上传视频
@@ -63,14 +65,19 @@ public class VideoController extends BasicController {
     public IMoocJSONResult upload(String userId,
                                   String bgmId, double videoSeconds, int videoWidth,
                                   int videoHeight, String desc, @ApiParam(value = "短视频", required = true) MultipartFile file) throws Exception {
+
         if (StringUtils.isBlank(userId)) {
             return IMoocJSONResult.errorMsg("用户id不能为空...");
         }
+        logger.info("controller:上传视频的入参userId:{},bgmId:{},videoSeconds:{},videoWidth:{},videoHeight:{},desc:{}",
+                userId,bgmId,videoSeconds,videoWidth,videoHeight,desc);
         //文件保存的命名空间
         String fileSpace = "C:/lmm_videos";
         //保存到数据库中的相对路径
         String uploadPathDB = "/" + userId + "/video";
         String coverPathDB = "/" + userId + "/video";
+        logger.info("controller:文件保存到数据库的相对路径,uploadPathDB:{},图片：coverPathDB:{}",
+                uploadPathDB,coverPathDB);
 
         FileOutputStream fileOutputStream = null;
         InputStream inputStream = null;
@@ -138,8 +145,8 @@ public class VideoController extends BasicController {
             tool.convertor(videoInputPath, mp3InputPath, videoSeconds, finalVideoPath);
 
         }
-        logger.info("uploadPathDB=" + uploadPathDB);
-        logger.info("finalVideoPath=" + finalVideoPath);
+        logger.info("controller：uploadPathDB=" + uploadPathDB);
+        logger.info("controller:文件上传的最终保存路径finalVideoPath=" + finalVideoPath);
 
         //保存视频信息到数据库中
         Videos video = new Videos();
@@ -156,7 +163,7 @@ public class VideoController extends BasicController {
         video.setCreateTime(new Date());
 
         String videoId = videoService.saveVideo(video);
-
+        logger.info("controller:上传视频的出参,videoId:{}",videoId);
         return IMoocJSONResult.ok(videoId);
     }
 
@@ -176,6 +183,7 @@ public class VideoController extends BasicController {
         if (StringUtils.isBlank(videoId) || StringUtils.isBlank(userId)) {
             return IMoocJSONResult.errorMsg("视频主键id和用户id不能为空...");
         }
+        logger.info("controller:用户上传头像,userId:{},videoId:{}",userId,videoId);
         //文件保存的命名空间
 //		String fileSpace="F:/lmm_videos";
         //保存到数据库中的相对路径
@@ -193,9 +201,10 @@ public class VideoController extends BasicController {
                 if (StringUtils.isNoneBlank(fileName)) {
                     //文件上传的最终保存路径
                     finalVideoPath = FILE_SPACE + uploadPathDB + "/" + fileName;
+                    logger.info("controller,文件上传的最终保存路径：finalVideoPath:{}",finalVideoPath);
                     //设置数据库保存的路径
                     uploadPathDB += ("/" + fileName);
-
+                    logger.info("controller,文件保存到数据库的路径:uploadPathDB:{}",uploadPathDB);
                     File outFile = new File(finalVideoPath);
                     if (outFile.getParentFile() != null || !outFile.getParentFile().isDirectory()) {
                         //创建父文件夹
@@ -221,7 +230,7 @@ public class VideoController extends BasicController {
         }
 
         videoService.updateVideo(videoId, uploadPathDB);
-
+        logger.info("controller:用户上传头像出参,videoId:{}",videoId);
 
         return IMoocJSONResult.ok(videoId);
     }
@@ -232,20 +241,29 @@ public class VideoController extends BasicController {
      * 1 - 需要保存
      * 0- 不需要保存，或者为空的时候
      * @param video
-     * @param isSaveRecord
+     * @param isSaveRecord 是否保存热搜词
      * @param page
      * @return
      * @throws Exception
      */
     @PostMapping(value = "/showAll")
-    public IMoocJSONResult showAll(@RequestBody Videos video, Integer isSaveRecord,
-                                   Integer page) throws Exception {
+    public IMoocJSONResult showAll(@RequestBody(required = false) Videos video, Integer isSaveRecord,
+                                   Integer page,Integer pageSize) throws Exception {
 
         //System.out.println(page);
+        logger.info("显示所有视频controller：video:{},isSaveRecord:{},page:{},pageSize:{}",
+                video,isSaveRecord,page,pageSize);
+        if (video ==null){
+            video = new Videos();
+        }
         if (page == null) {
             page = 1;
         }
-        PagedResult result = videoService.getAllVideos(video, isSaveRecord, page, PAGE_SIZE);
+        if (pageSize ==null){
+            pageSize = PAGE_SIZE;
+        }
+        PagedResult result = videoService.getAllVideos(video, isSaveRecord, page, pageSize);
+        logger.info("显示所有视频controller出参：result:{}",result);
         return IMoocJSONResult.ok(result);
     }
 
@@ -262,13 +280,18 @@ public class VideoController extends BasicController {
 
     @PostMapping(value = "/userLike")
     public IMoocJSONResult userLike(String userId, String videoId, String videoCreaterId) throws Exception {
+        logger.info("controller用户设置喜欢：userId:{},videoId:{},videoCreaterId:{}",
+                userId,videoId,videoCreaterId);
         videoService.userLikeVideo(userId, videoId, videoCreaterId);
         return IMoocJSONResult.ok(videoService.getHotWords());
     }
 
     @PostMapping(value = "/userUnLike")
     public IMoocJSONResult userUnLike(String userId, String videoId, String videoCreaterId) throws Exception {
+        logger.info("controller用户设置不喜欢：userId:{},videoId:{},videoCreaterId:{}",
+                userId,videoId,videoCreaterId);
         videoService.userUnLikeVideo(userId, videoId, videoCreaterId);
+        logger.info("controller用户设置不喜欢出参：hotWords:{}",videoService.getHotWords());
         return IMoocJSONResult.ok(videoService.getHotWords());
     }
 
@@ -282,6 +305,7 @@ public class VideoController extends BasicController {
      */
     @PostMapping(value = "showMyFollow")
     public IMoocJSONResult showMyFollow(String userId, Integer page) throws Exception {
+        logger.info("controller展示用户关注人的所有视频:userId:{},page:{}",userId,page);
         if (StringUtils.isBlank(userId)) {
             return IMoocJSONResult.ok();
         }
@@ -291,7 +315,7 @@ public class VideoController extends BasicController {
         int pageSize = 6;
 
         PagedResult videoList = videoService.queryMyFollowVideos(userId, page, pageSize);
-
+        logger.info("controller展示用户关注人的所有视频出参：videoList:{}",videoList);
         return IMoocJSONResult.ok(videoList);
     }
 
@@ -304,6 +328,7 @@ public class VideoController extends BasicController {
      */
     @PostMapping(value = "showMyLike")
     public IMoocJSONResult showMyLike(String userId, Integer page, Integer pageSize) throws Exception {
+        logger.info("controller用户收藏（点赞）的视频:userId:{}",userId);
         if (StringUtils.isBlank(userId)) {
             return IMoocJSONResult.ok();
         }
@@ -315,7 +340,7 @@ public class VideoController extends BasicController {
         }
 
         PagedResult videoList = videoService.queryMyLikeVideos(userId, page, pageSize);
-
+        logger.info("controller用户收藏（点赞）的视频出参:videoList:{}",videoList);
         return IMoocJSONResult.ok(videoList);
     }
 
@@ -329,6 +354,8 @@ public class VideoController extends BasicController {
     @PostMapping("/saveComment")
     public IMoocJSONResult saveComment(@RequestBody Comments comments,String fatherCommentId,
                                        String toUserId )throws Exception{
+        logger.info("controller保存用户评论：Comments:{},fatherCommentId:{},toUserId:{}",
+                comments,fatherCommentId,toUserId);
         comments.setFatherCommentId(fatherCommentId);
         comments.setToUserId(toUserId);
         videoService.saveComment(comments);
@@ -345,6 +372,7 @@ public class VideoController extends BasicController {
      */
     @PostMapping("/getVideoComments")
     public IMoocJSONResult getVideoComments(String videoId,Integer page,Integer pageSize)throws Exception{
+        logger.info("controller分页查询评论列表:videoId:{}",videoId);
         if (StringUtils.isBlank(videoId)){
             return IMoocJSONResult.ok();
         }
@@ -357,6 +385,7 @@ public class VideoController extends BasicController {
         }
 
         PagedResult list = videoService.getAllComments(videoId,page,pageSize);
+        logger.info("controller分页查询评论列表出参:list:{}",list);
         return IMoocJSONResult.ok(list);
     }
 }

@@ -18,6 +18,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +40,7 @@ public class UserController extends BasicController{
     @Autowired
     private UserService userService;
 
+    private static Logger logger = LoggerFactory.getLogger(UserController.class);
     /**
      * 用户上传头像
      * */
@@ -49,8 +52,9 @@ public class UserController extends BasicController{
         if (StringUtils.isBlank(userId)){
             return IMoocJSONResult.errorMsg("用户id不能为空...");
         }
+        logger.info("controller用户上传头像入参：userId:{}",userId);
         //文件保存的命名空间
-        String fileSpace="F:/lmm_videos";
+//        String fileSpace="F:/lmm_videos";
         //保存到数据库中的相对路径
         String uploadPathDB="/"+userId+"/face";
 
@@ -63,10 +67,11 @@ public class UserController extends BasicController{
 
                 if (StringUtils.isNoneBlank(fileName)){
                     //文件上传的最终保存路径
-                    String finalFacePath=fileSpace+uploadPathDB+"/"+fileName;
+                    String finalFacePath=FILE_SPACE+uploadPathDB+"/"+fileName;
+                    logger.info("controller用户上传头像的最终路径：finalFacePath:{}",finalFacePath);
                     //设置数据库保存的路径
                     uploadPathDB+=("/"+fileName);
-
+                    logger.info("controller用户上传头像的数据库最终路径：uploadPathDB:{}",uploadPathDB);
                     File outFile=new File(finalFacePath);
                     if (outFile.getParentFile()!=null||!outFile.getParentFile().isDirectory()){
                         //创建父文件夹
@@ -95,7 +100,7 @@ public class UserController extends BasicController{
         user.setId(userId);
         user.setFaceImage(uploadPathDB);
         userService.updateUserInfo(user);
-
+        logger.info("controller用户上传头像的出参：uploadPathDB:{}",uploadPathDB);
         return IMoocJSONResult.ok(uploadPathDB);
     }
 
@@ -107,12 +112,13 @@ public class UserController extends BasicController{
         if (StringUtils.isBlank(userId)){
             return IMoocJSONResult.errorMsg("用户id不能为空...");
         }
-
+        logger.info("controller查询用户信息入参：userId:{},fanId:{}",userId,fanId);
         Users userInfo=userService.queryUserInfo(userId);
         UsersVo usersVo=new UsersVo();
         BeanUtils.copyProperties(userInfo,usersVo);
 
         usersVo.setFollow(userService.queryIsFollow(userId,fanId));
+        logger.info("controller查询用户信息出参：usersVo:{}",usersVo);
         return IMoocJSONResult.ok(usersVo);
     }
 
@@ -129,7 +135,8 @@ public class UserController extends BasicController{
         if (StringUtils.isBlank(publisherUserId)){
             return IMoocJSONResult.errorMsg("视频提供者id不能为空！");
         }
-
+        logger.info("controller查询视频发布者的信息入参：loginUserId:{},videoId:{},publisherUserId:{}"
+                ,loginUserId,videoId,publisherUserId);
         //1.查询视频发布者的信息
         Users userInfo=userService.queryUserInfo(publisherUserId);
         UsersVo publisher=new UsersVo();
@@ -140,12 +147,21 @@ public class UserController extends BasicController{
         PublisherVideo publisherVideo = new PublisherVideo();
         publisherVideo.setPublisher(publisher);
         publisherVideo.setUserLikeVideo(userLikeVideo);
-
+        logger.info("controller查询视频发布者的信息出参：publisherVideo:{}",publisherVideo);
         return IMoocJSONResult.ok(publisherVideo);
     }
 
+    /**
+     * 用户关注
+     * @param userId
+     * @param fanId
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/beYourFans")
     public IMoocJSONResult beYourFans(String userId,String fanId)throws Exception{
+        logger.info("controller用户关注入参：userId:{},fanId:{}"
+                ,userId,fanId);
         if (StringUtils.isBlank(userId) || StringUtils.isBlank(fanId)){
             return IMoocJSONResult.errorMsg("用户id不能为空...");
         }
@@ -153,18 +169,27 @@ public class UserController extends BasicController{
         return IMoocJSONResult.ok("关注成功！");
     }
 
+    /**
+     * 用户取消关注
+     * @param userId
+     * @param fanId
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/notBeYourFans")
     public IMoocJSONResult notBeYourFans(String userId,String fanId)throws Exception{
         if (StringUtils.isBlank(userId) || StringUtils.isBlank(fanId)){
             return IMoocJSONResult.errorMsg("用户id不能为空...");
         }
+        logger.info("controller用户取消关注入参：userId:{},fanId:{}"
+                ,userId,fanId);
         userService.delUserFanRelation(userId,fanId);
         return IMoocJSONResult.ok("取消关注成功！");
     }
     //举报用户
     @PostMapping("/reportUser")
     public IMoocJSONResult reportUser(@RequestBody UsersReport usersReport) throws Exception {
-
+        logger.info("controller用户举报入参：usersReport:{}",usersReport);
         // 保存举报信息
         userService.reportUser(usersReport);
 

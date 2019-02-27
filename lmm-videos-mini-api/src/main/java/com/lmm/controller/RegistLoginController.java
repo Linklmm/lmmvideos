@@ -15,6 +15,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,10 +32,12 @@ public class RegistLoginController extends BasicController{
 
     @Autowired
     private UserService userService;
+    private static Logger logger = LoggerFactory.getLogger(RegistLoginController.class);
 
     @ApiOperation(value = "用户注册的接口",notes ="用户注册的接口" )
     @PostMapping("/regist")
     public IMoocJSONResult regist(@RequestBody Users user) throws Exception {
+        logger.info("controller用户注册的接口的入参:user:{}",user);
         //1.判断用户名和密码不为空
         if (StringUtils.isBlank(user.getUsername())||StringUtils.isBlank(user.getPassword())){
             return IMoocJSONResult.errorMsg("用户名和密码不能为空");
@@ -62,7 +66,7 @@ public class RegistLoginController extends BasicController{
 //        usersVo.setUserToken(uniqueToken);
 
         UsersVo usersVo=setUserRedisSessionToken(user);
-
+        logger.info("controller用户注册的接口的出参:usersVo:{}",usersVo);
         return IMoocJSONResult.ok(usersVo);
 
     }
@@ -85,6 +89,7 @@ public class RegistLoginController extends BasicController{
         if (StringUtils.isBlank(user.getUsername())||StringUtils.isBlank(user.getPassword())){
             return IMoocJSONResult.errorMsg("用户名和密码不能为空");
         }
+        logger.info("controller用户登录的接口的入参:user:{}",user);
         //2.判断用户名是否存在
         boolean usernameIsExist=userService.queryUsernameIsExist(user.getUsername());
 
@@ -108,6 +113,7 @@ public class RegistLoginController extends BasicController{
             dataType = "String",paramType = "query")
     @PostMapping("/logout")
     public IMoocJSONResult logout(String userId) throws Exception {
+        logger.info("controller用户注销的接口:userId:{}",userId);
         redis.del(USER_REDIS_SESSION+":"+userId);
         return IMoocJSONResult.ok();
     }

@@ -75,8 +75,8 @@ public class ZKCuratorClient {
                     //1.从数据库查询bgm对象，获取路劲
                     String path = event.getData().getPath();
 
-                    String operatorObjStr = new String(event.getData().getData());
-                    log.info("bgm的路径：{}",event.getData().getData().toString(),"UTF-8");
+                    String operatorObjStr = new String(event.getData().getData(),"UTF-8");
+                    log.info("bgm的路径：{}",event.getData().getData().toString());
                     Map<String, String> map = JsonUtils.jsonToPojo(operatorObjStr, Map.class);
                     String operatorType = map.get("operType");
                     String songPath = map.get("path");
@@ -95,7 +95,8 @@ public class ZKCuratorClient {
                     String filePath = resourceConfig.getFileSpace() + songPath;
 
                     //3.定义下载的路径（播放URL）
-                    String arrPath[] = songPath.split("\\\\");
+//                    String arrPath[] = songPath.split("\\\\");windows
+                    String arrPath[] = songPath.split("/");//Linux
                     String finalPath = "";
                     //3.1 处理URL路径的斜杆
                     for (int i = 0; i < arrPath.length; i++) {
